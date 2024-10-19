@@ -1,31 +1,31 @@
 <template>
-    <div class="container auth-container">
-      <div class="form-singup w-100 m-auto">
-        <h2 class="h3 mb-3 fw-normal text-center">Sign up</h2>
-        <form @submit.prevent="register">
-          <div class="form-floating">
-            <input type="email" v-model="email" class="form-control" id="floatingInput" placeholder="Email address" required/>
-            <label for="floatingInput">Email address</label>
-          </div>
-          <div class="form-floating">
-            <input type="text" v-model="username" class="form-control" id="floatingInput" placeholder="Username" required/>
-            <label for="floatingInput">Username</label>
-          </div>
-          <div class="form-floating">
-            <input type="password" v-model="password" class="form-control password-input" id="floatingInput" placeholder="Password" required/>
-            <label for="floatingInput">Password</label>
-          </div>
-          <div class="form-floating">
-            <input type="password" v-model="password_confirmation" class="form-control confirm-password-input" id="floatingInput" placeholder="Confirm password" required/>
-            <label for="floatingInput">Confirm password</label>
-          </div>
-          <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
-        </form>
-    
-        <div v-if="error" class="error">{{ error }}</div>
-      </div>
+  <div class="container auth-container">
+    <div class="form-singup w-100 m-auto">
+      <h2 class="h3 mb-3 fw-normal text-center">Sign up</h2>
+      <form @submit.prevent="register">
+        <div class="form-floating">
+          <input type="email" v-model="email" class="form-control" id="floatingInput" placeholder="Email address" required/>
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" v-model="username" class="form-control" id="floatingInput" placeholder="Username" required/>
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" v-model="password" class="form-control password-input" id="floatingInput" placeholder="Password" required/>
+          <label for="floatingInput">Password</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" v-model="password_confirmation" class="form-control confirm-password-input" id="floatingInput" placeholder="Confirm password" required/>
+          <label for="floatingInput">Confirm password</label>
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+      </form>
+  
+      <div v-if="error" class="error">{{ error }}</div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
   export default {
@@ -56,12 +56,13 @@
   
           if (!response.ok) {
             const data = await response.json();
-            this.error = data.message || 'Произошла ошибка';
+            this.error = data.message || 'Response error';
           } else {
-            alert('Регистрация успешна!');
+            alert('Registration successful!');
+            this.$router.push('/login');
           }
         } catch (error) {
-          this.error = 'Ошибка сети';
+          this.error = 'Network error';
         }
       },
     },

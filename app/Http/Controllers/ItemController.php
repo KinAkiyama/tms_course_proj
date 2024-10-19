@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class HomeController extends Controller
+class ItemController extends Controller
 {
-    public function showTitels () {
-        $response = Http::withOptions(['verify' => false])->get('https://api.jikan.moe/v4/top/anime');
+    public function getTitel ($mal_id) {
+        $response = Http::withOptions(['verify' => false])->get("https://api.jikan.moe/v4/anime/{$mal_id}");
 
         if ($response->successful()) {
             return response()->json($response->json());
