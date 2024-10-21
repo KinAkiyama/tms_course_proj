@@ -47,9 +47,17 @@
         <div class="titel-description">
             <p>{{ titel.synopsis }}</p>
         </div>
+        <div class="episode-selector">
+            <h3>Episodes</h3>
+            <div class="row p-0">
+                <div v-for="episode in episodes" :key="episode.mal_id" class="episode-item p-3 m-2">
+                    <a href="#" @click.prevent="selectEpisode(episode.url)">{{ episode.mal_id }}</a>
+                </div>
+            </div>
+        </div>
         <div class="title-video">
-            <iframe v-if="titel.trailer && titel.trailer.embed_url" :src="titel.trailer.embed_url" class="h-100%" frameborder="0" width="100%" height="auto" scrolling="no" allowfullscreen 
-            allow="accelerometer *; autoplay *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; fullscreen *"></iframe>
+            <iframe v-if="selectedEpisodeUrl" :src="selectedEpisodeUrl" class="h-100%" frameborder="0" width="100%" height="auto" scrolling="no" allowfullscreen 
+            allow="accelerometer *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; fullscreen *"></iframe>
         </div>
     </div>
 </template>
@@ -59,17 +67,37 @@
         data() {
             return {
                 titel: {},
+                episodes: [],
+                selectedEpisodeUrl: null,
             };
         },
         async mounted() {
         const mal_id = this.$route.params.mal_id;
-        try {
-            const response = await fetch(`/api/titel/${mal_id}`);
-            const data = await response.json();
-            this.titel = data.data;
-        } catch (error) {
-            console.error('Ошибка:', error);
-        }
+        await this.fetchTitel(mal_id);
+        await this.fetchEpisodes(mal_id);
+        },
+        methods: {
+        async fetchTitel(mal_id) {
+            try {
+                const response = await fetch(`/api/titel/${mal_id}`);
+                const data = await response.json();
+                this.titel = data.data;
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        },
+        async fetchEpisodes(mal_id) {
+            try {
+                const response = await fetch(`/api/titel/${mal_id}/episodes`);
+                const data = await response.json();
+                this.episodes = data.data;
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        },
+        selectEpisode(url) {
+            this.selectedEpisodeUrl = url;
+        },
     },
     }
 </script>

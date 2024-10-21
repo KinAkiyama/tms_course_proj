@@ -1,7 +1,5 @@
 <template>
     <div class="container py-3">
-        <div v-if="!isAuthenticated">Unauthenticated</div>
-        <div v-else>Authenticated</div>
         <ul class="titels-list row p-0">
             <li v-for="titel in titels" :key="titel.mal_id" class="titel-item col-2 col-mb-2 px-3 pb-4">
                 <router-link :to="`/titel/${titel.mal_id}`" class="titel-item-container" @mouseenter="handleMouseEnter(titel)" @mouseleave="handleMouseLeave">
@@ -22,43 +20,9 @@
                 </router-link>
             </li>
         </ul>
+        <button @click="loadMore" v-if="hasNextPage">Show more</button>
     </div>
 </template>
-
-<!-- <script>
-import axios from 'axios';
-
-export default {
-    data() {
-        return {
-            titels: [],
-            hoveredTitleId: null,
-        };
-    },
-    mounted() {
-        this.fetchTitels();
-    },
-    methods: {
-        async fetchTitels() {
-            try {
-                const response = await axios.get('/api/home');
-                this.titels = response.data.data;
-            } catch (error) {
-                console.error('Loading error: ', error);
-            }
-        },
-        addToFavorites (titel) {
-            //////////
-        },
-        handleMouseEnter (titel) {
-            this.hoveredTitleId = titel.mal_id;
-        },
-        handleMouseLeave() {
-            this.hoveredTitleId = null;
-        }
-    }
-};
-</script> -->
 
 <script>
 import axios from 'axios';
@@ -68,6 +32,8 @@ export default {
     return {
       titels: [],
       hoveredTitleId: null,
+      currentPage: 1,
+      hasNextPage: true,
     };
   },
   computed: {
@@ -81,20 +47,44 @@ export default {
     }
   },
   methods: {
-    async fetchTitels() {
+    async fetchTitels(page = 1) {
       try {
-        const response = await axios.get('/api/home', {
+        const response = await axios.get(`/api/home?page=${page}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        this.titels = response.data.data;
+        if (page === 1) {
+          this.titels = response.data.data;
+        } else {
+          this.titels.push(...response.data.data);
+        }
+        this.hasNextPage = response.data.pagination.has_next_page;
       } catch (error) {
         console.error('Loading error: ', error);
       }
     },
-    addToFavorites(titel) {
-      //////////
+    loadMore() {
+      this.currentPage++;
+      this.fetchTitels(this.currentPage);
+    },
+    async addToFavorites(titel) {
+      if (!this.isAuthenticated) {
+        alert('You need to be logged in to add favorites.');
+        return;
+      }
+
+      try {
+        await axios.post('/api/favorites', { mal_id: titel.mal_id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        alert('Added to favorites!');
+      } catch (error) {
+        console.error('Error adding to favorites:', error);
+        alert('Could not add to favorites. Please try again.');
+      }
     },
     handleMouseEnter(titel) {
       this.hoveredTitleId = titel.mal_id;

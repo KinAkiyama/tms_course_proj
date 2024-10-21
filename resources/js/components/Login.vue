@@ -20,6 +20,8 @@
   </template>
   
   <script>
+  import axios from 'axios';
+
   export default {
     data() {
       return {
@@ -31,7 +33,7 @@
     methods: {
       async login() {
         try {
-          const response = await fetch('/api/login', {
+          const response = await axios.post('/api/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -49,6 +51,7 @@
           const data = await response.json();
           const token = data.token;
           localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(data.user));
 
           this.$router.push('/home');
           }

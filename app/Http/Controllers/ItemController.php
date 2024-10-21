@@ -16,4 +16,14 @@ class ItemController extends Controller
 
         return response()->json(['error' => 'Unable to fetch data'], 500);
     }
+
+    public function getTitleEpisodes ($mal_id) {
+        $response = Http::withOptions(['verify' => false])->get("https://api.jikan.moe/v4/anime/{$mal_id}/episodes");
+        
+        if ($response->successful()) {
+            return response()->json($response->json());
+        }
+
+        return response()->json(['error' => 'Unable to fetch data'], 500);
+    }
 }

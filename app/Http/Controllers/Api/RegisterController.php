@@ -29,7 +29,7 @@ class RegisterController extends Controller
             'password' => $request->password,
             'lastSignAt' => now(),
             'roles' => json_encode([UserRoles::User]),
-            'status' => UserStatus::Active->value,
+            'status' => UserStatus::Inactive->value,
         ]);
 
         return response()->json(['user' => $user], 201);

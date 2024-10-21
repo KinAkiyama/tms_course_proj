@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enum\UserStatus;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -22,14 +24,35 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-            $token = $user->createToken('otakuverse')->plainTextToken;
-            return response()->json([
-                'user' => $user,
-                'token' => $token,
-            ], 200);
+            $user = User::where('email', $request->email);
+            if ($user) {
+                $user->status = UserStatus::Active->value;
+                $user->save();
+
+                $token = $user->createToken(time())->plainTextToken;
+                return response()->json(['user' => $user, 'token' => $token], 200);
+            }
         }
         return response()->json(['error' => 'Incorrect email or password'], 401);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = User::find(Auth::id());
+        if (!Auth::check()) {
+            return response()->json(['error' => 'User is not authenticated'], 401);
+        }
+        if ($user) {
+            Log::info('User found: ' . $user->id);
+            $user->status = UserStatus::Inactive->value;
+            if ($user->save()) {
+                Auth::logout();
+                return response()->json(['message' => 'Successfully logged out'], 200);
+            } else {
+                return response()->json(['error' => 'Failed to save user status'], 500);
+            }
+        }
+        return response()->json(['error' => 'Something happend'], 401);
     }
 }
 
