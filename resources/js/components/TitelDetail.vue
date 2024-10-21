@@ -44,13 +44,15 @@
                 </ul>
             </div>
         </div>
-        <div class="titel-description">
+        <div class="titel-description py-2">
             <p>{{ titel.synopsis }}</p>
         </div>
         <div class="episode-selector">
-            <h3>Episodes</h3>
+            <div class="episodes-selector-title">
+                <h3>Episodes</h3>
+            </div>
             <div class="row p-0">
-                <div v-for="episode in episodes" :key="episode.mal_id" class="episode-item p-3 m-2">
+                <div v-for="episode in episodes" :key="episode.mal_id" class="episode-item fw-semibold p-3 m-2">
                     <a href="#" @click.prevent="selectEpisode(episode.url)">{{ episode.mal_id }}</a>
                 </div>
             </div>

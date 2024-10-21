@@ -1,7 +1,7 @@
 <template>
     <Navbar />
     <router-view></router-view>
-  </template>
+</template>
   
   <script>
   import Register from './Register.vue';

@@ -20,7 +20,7 @@
                 </router-link>
             </li>
         </ul>
-        <button @click="loadMore" v-if="hasNextPage">Show more</button>
+        <button @click="loadMore" v-if="hasNextPage" class="show-more-btn btn w-100 fs-6 fw-semibold">Show more</button>
     </div>
 </template>
 

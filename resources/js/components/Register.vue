@@ -1,7 +1,7 @@
 <template>
   <div class="container auth-container">
-    <div class="form-singup w-100 m-auto">
-      <h2 class="h3 mb-3 fw-normal text-center">Sign up</h2>
+    <div class="form-singup w-100 m-auto p-4">
+      <h2 class="h3 mb-3 fw-semibold text-center pb-3">Sign up</h2>
       <form @submit.prevent="register">
         <div class="form-floating">
           <input type="email" v-model="email" class="form-control" id="floatingInput" placeholder="Email address" required/>
@@ -19,7 +19,7 @@
           <input type="password" v-model="password_confirmation" class="form-control confirm-password-input" id="floatingInput" placeholder="Confirm password" required/>
           <label for="floatingInput">Confirm password</label>
         </div>
-        <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+        <button class="btn fs-4 fw-bold w-100 py-2" type="submit">Register</button>
       </form>
   
       <div v-if="error" class="error">{{ error }}</div>
@@ -41,7 +41,7 @@
     methods: {
       async register() {
         try {
-          const response = await fetch('/api/register', {
+          const response = await fetch('/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
