@@ -8,7 +8,6 @@
 </head>
 <body>
     <div id="app">
-        <h1>home</h1>
     </div>
 </body>
 </html>

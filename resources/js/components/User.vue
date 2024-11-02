@@ -12,7 +12,10 @@
             </div>
         </div>
         <h3>Your Favorites</h3>
-        <ul class="titels-list row p-0">
+        <div v-for="favorite in favorites" :key="favorites.mal_id">
+            <h1>{{ favorites.mal_id }}</h1>
+        </div>
+        <!-- <ul class="titels-list row p-0">
             <li v-for="favorite in favorites" :key="favorite.mal_id" class="titel-item col-2 col-mb-2 px-3 pb-4">
                 <router-link :to="`/titel/${favorite.mal_id}`" class="titel-item-container" @mouseenter="handleMouseEnter(favorite)" @mouseleave="handleMouseLeave">
                     <div class="titel-item-imageSection">
@@ -31,7 +34,7 @@
                     </div>
                 </router-link>
             </li>
-        </ul>
+        </ul> -->
         <button class="btn w-100 bg-danger fw-semibold" @click="deleteUser(user.id)">Delete Account</button>
     </div>
 </template>
@@ -49,22 +52,24 @@ export default {
     };
   },
   mounted() {
-    this.fetchFavorites();
     const userId = this.$route.params.id;
     this.fetchUser(userId);
     this.fetchFavorites(userId);
   },
   methods: {
-    async fetchFavorites() {
+    async logout() {
       try {
-        const response = await axios.get('/api/favorites', {
+        await axios.post('/api/logout', {}, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        this.favorites = response.data;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.$router.push('/home');
+        alert('Successfully logged out');
       } catch (error) {
-        console.error('Error fetching favorites: ', error);
+        console.error('Logout error:', error);
       }
     },
     handleMouseEnter(favorite) {
@@ -73,9 +78,9 @@ export default {
     handleMouseLeave() {
       this.hoveredTitleId = null;
     },
-    async deleteUser(id) {
+    async deleteUser(userId) {
         try {
-            await axios.delete(`/api/user/${id}`, {
+            await axios.delete(`/api/user/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
@@ -88,9 +93,9 @@ export default {
             console.error('Delete user error:', error);
         }
     },
-    async fetchUser(id) {
+    async fetchUser(userId) {
         try {
-            const response = await axios.get(`/api/user/${id}`, {
+            const response = await axios.get(`/api/user/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -100,9 +105,9 @@ export default {
             console.error('Error fetching user:', error);
         }
     },
-    async updateUser(id) {
+    async updateUser(userId) {
         try {
-            const response = await axios.put(`/api/user/${id}/update`, {
+            const response = await axios.put(`/api/user/${userId}/update`, {
                 username: this.newUsername,
             }, {
                 headers: {
@@ -115,18 +120,41 @@ export default {
             console.log('Error updating user: ', error);
         }
     },
-    async fetchFavorites(id) {
+    async fetchFavorites(userId) {
         try {
-            const response = await axios.get(`/api/user/${id}/favorites`, {
+            const response = await axios.get(`/api/user/${userId}/favorites`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            this.favorites = response.data;
+            const favoriteIds = response.data;
+            this.favorites = await this.fetchAnimeData(favoriteIds);
         } catch (error) {
             console.error('Error fetching favorites:', error);
         }
     },
+
+    async fetchAnimeData(favoriteIds) {
+        const requests = favoriteIds.map(favorite => {
+            const mal_id = favorite.mal_id || favorite;
+            return this.fetchTitel(mal_id);
+        });
+        this.favorites = await Promise.all(requests);
+    },
+    async fetchTitel(mal_id) {
+        console.log('Fetching title for mal_id:', mal_id);
+        try {
+            const response = await fetch(`/api/titel/${mal_id}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Ошибка:', error);
+            return null; // или какое-то значение по умолчанию
+        }
+    }
     },
 };
 </script>

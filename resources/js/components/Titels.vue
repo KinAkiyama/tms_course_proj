@@ -1,5 +1,8 @@
 <template>
     <div class="container py-3">
+      <!-- <slider ref="slider" :options="{ pagination: true }"> слайдер не работает по одному богу известной причине
+      <slideritem v-for="i in 4" :key="i">{{ i }}</slideritem>
+    </slider> -->
         <ul class="titels-list row p-0">
             <li v-for="titel in titels" :key="titel.mal_id" class="titel-item col-2 col-mb-2 px-3 pb-4">
                 <router-link :to="`/titel/${titel.mal_id}`" class="titel-item-container" @mouseenter="handleMouseEnter(titel)" @mouseleave="handleMouseLeave">
@@ -11,11 +14,14 @@
                                 <div class="">{{ titel.type }} {{ titel.year }}</div>
                                 <div class="">{{ titel.themes.name }}</div>
                             </div>
-                            <button class="btn" @click="addToFavorites(titel)">Watch later</button>
+                            <button class="btn text-white" @click.prevent="addToFavorites(titel)">Watch later</button>
                         </div>
                     </div>
-                    <div class="titel-item-textSection mt-2">
+                    <div v-if="titel.title_english" class="titel-item-textSection mt-2">
                         {{ titel.title_english }}
+                    </div>
+                    <div v-else class="titel-item-textSection mt-2">
+                        {{ titel.title }}
                     </div>
                 </router-link>
             </li>
@@ -42,9 +48,7 @@ export default {
     },
   },
   mounted() {
-    if (this.isAuthenticated) {
-      this.fetchTitels();
-    }
+    this.fetchTitels();
   },
   methods: {
     async fetchTitels(page = 1) {

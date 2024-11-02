@@ -40,30 +40,23 @@
     },
     methods: {
       async register() {
-        try {
-          const response = await fetch('/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: this.email,
-              username: this.username,
-              password: this.password,
-              password_confirmation: this.password_confirmation,
-            }),
-          });
-  
-          if (!response.ok) {
-            const data = await response.json();
-            this.error = data.message || 'Response error';
-          } else {
-            alert('Registration successful!');
-            this.$router.push('/login');
-          }
-        } catch (error) {
+      try {
+        const response = await axios.post('/api/register', {
+          email: this.email,
+          username: this.username,
+          password: this.password,
+          password_confirmation: this.password_confirmation,
+        });
+
+        alert('Registration successful!');
+        this.$router.push('/login');
+      } catch (error) {
+        if (error.response) {
+          this.error = error.response.data.message || 'Response error';
+        } else {
           this.error = 'Network error';
         }
+      }
       },
     },
   };
