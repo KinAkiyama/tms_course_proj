@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enum\UserRoles;
 use App\Enum\UserStatus;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -31,7 +29,7 @@ class RegisterController extends Controller
             'password' => $request->password,
             'lastSignAt' => now(),
             'roles' => json_encode([UserRoles::User]),
-            'status' => UserStatus::Active->value,
+            'status' => UserStatus::Inactive->value,
         ]);
 
         return response()->json(['user' => $user], 201);
