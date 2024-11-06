@@ -12,10 +12,13 @@
             </div>
         </div>
         <h3>Your Favorites</h3>
-        <div v-for="favorite in favorites" :key="favorites.mal_id">
-            <h1>{{ favorites.mal_id }}</h1>
+        <!-- <div v-if="favorites.length != 0" v-for="favorite in favorites" :key="favorite.mal_id">
+            <h1>{{ favorite.mal_id }}</h1>
         </div>
-        <!-- <ul class="titels-list row p-0">
+        <div v-else class="">
+            <h1>there is no favorites anime</h1>
+        </div> -->
+        <ul class="titels-list row p-0">
             <li v-for="favorite in favorites" :key="favorite.mal_id" class="titel-item col-2 col-mb-2 px-3 pb-4">
                 <router-link :to="`/titel/${favorite.mal_id}`" class="titel-item-container" @mouseenter="handleMouseEnter(favorite)" @mouseleave="handleMouseLeave">
                     <div class="titel-item-imageSection">
@@ -34,7 +37,7 @@
                     </div>
                 </router-link>
             </li>
-        </ul> -->
+        </ul>
         <button class="btn w-100 bg-danger fw-semibold" @click="deleteUser(user.id)">Delete Account</button>
     </div>
 </template>
@@ -128,7 +131,8 @@ export default {
                 },
             });
             const favoriteIds = response.data;
-            this.favorites = await this.fetchAnimeData(favoriteIds);
+            const titleData = await this.fetchAnimeData(favoriteIds);
+            this.favorites = [...titleData];
         } catch (error) {
             console.error('Error fetching favorites:', error);
         }
@@ -136,13 +140,14 @@ export default {
 
     async fetchAnimeData(favoriteIds) {
         const requests = favoriteIds.map(favorite => {
-            const mal_id = favorite.mal_id || favorite;
+            const mal_id = favorite.mal_id;
             return this.fetchTitel(mal_id);
         });
-        this.favorites = await Promise.all(requests);
+        const result = await Promise.all(requests);
+        return result.filter(item => item !== null);
     },
+
     async fetchTitel(mal_id) {
-        console.log('Fetching title for mal_id:', mal_id);
         try {
             const response = await fetch(`/api/titel/${mal_id}`);
             if (!response.ok) {
@@ -152,7 +157,7 @@ export default {
             return data.data;
         } catch (error) {
             console.error('Ошибка:', error);
-            return null; // или какое-то значение по умолчанию
+            return null;
         }
     }
     },
