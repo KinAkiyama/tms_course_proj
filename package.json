@@ -22,6 +22,7 @@
         "vue-concise-slider": "^4.2.5"
     },
     "dependencies": {
-        "vue-router": "^4.4.5"
+        "vue-router": "^4.4.5",
+        "vue3-carousel": "^0.5.1"
     }
 }

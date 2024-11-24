@@ -142,6 +142,27 @@ form .btn:hover {
     opacity: 1;
 }
 
+.carousel-container {
+    width: 100%;
+    // padding: 0px, 20px
+    background-color: $light-color-main;
+}
+
+.carousel-titel-item-imageSection {
+    width: 100%;
+    padding: 5px;
+
+}
+
+.carousel-titel-item-imageSection img {
+    max-width: 100%;
+    height: 235px;
+}
+
+// .carousel__slide {
+//     height: 235px;
+// }
+
 .score-info {
     font-weight: bolder;
 }
@@ -253,4 +274,31 @@ cursor: pointer;
 }
 .list-group-item:hover {
 background-color: #f8f9fa;
+}
+
+// Comments
+
+.comment {
+    padding: 10px;
+    margin: 10px;
+
+    border-bottom: 1px solid $light-color-main;
+}
+
+.comment-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: 10px;
+}
+
+.comment a {
+    margin-bottom: 10px;
+}
+
+.comment-stats span {
+    padding-right: 10px;
+
+    font-weight: 600;
 }

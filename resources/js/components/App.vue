@@ -10,6 +10,7 @@
   import Titels from './Titels.vue';
   import TitelDetail from './TitelDetail.vue';
   import User from './User.vue';
+  import Comments from './Comments.vue';
   import { slider, slideritem } from 'vue-concise-slider';
   
   export default {
@@ -20,6 +21,7 @@
       Titels,
       TitelDetail,
       User,
+      Comments,
       slider,
       slideritem,
     },

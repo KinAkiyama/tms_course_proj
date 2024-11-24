@@ -62,23 +62,30 @@
             allow="accelerometer *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; fullscreen *"></iframe>
         </div>
     </div>
+    <Comment>
+    </Comment>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                titel: {},
-                episodes: [],
-                selectedEpisodeUrl: null,
-            };
-        },
-        async mounted() {
-        const mal_id = this.$route.params.mal_id;
-        await this.fetchTitel(mal_id);
-        await this.fetchEpisodes(mal_id);
-        },
-        methods: {
+import Comment from './Comments.vue';
+
+export default {
+    data() {
+        return {
+            titel: {},
+            episodes: [],
+            selectedEpisodeUrl: null,
+        };
+    },
+    async mounted() {
+    const mal_id = this.$route.params.mal_id;
+    await this.fetchTitel(mal_id);
+    await this.fetchEpisodes(mal_id);
+    },
+    components: {
+        Comment,
+    },
+    methods: {
         async fetchTitel(mal_id) {
             try {
                 const response = await fetch(`/api/titel/${mal_id}`);
@@ -101,5 +108,5 @@
             this.selectedEpisodeUrl = url;
         },
     },
-    }
+}
 </script>

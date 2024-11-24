@@ -1,8 +1,35 @@
 <template>
     <div class="container py-3">
-      <!-- <slider ref="slider" :options="{ pagination: true }"> слайдер не работает по одному богу известной причине
-      <slideritem v-for="i in 4" :key="i">{{ i }}</slideritem>
-    </slider> -->
+      <div class="carousel-container">
+        <carousel :items-to-show="5" :wrap-around="true" :items-to-scroll="5" class="mb-3">
+          <slide v-for="title in thisSeasontitels" :key="title.mal_id" >
+            <router-link :to="`/titel/${title.mal_id}`" class="carousel-titel-item-container" @mouseenter="handleMouseEnter(title)" @mouseleave="handleMouseLeave">
+              <div class="carousel-titel-item-imageSection">
+                  <img :src="title.images.jpg.image_url" alt="title image" />
+                  <div class="titel-item-overlay" v-if="hoveredTitleId === title.mal_id">
+                      <div class="titel-item-info">
+                          <div class="score-info">{{ title.score }}</div>
+                          <div class="">{{ title.type }} {{ title.year }}</div>
+                          <div class="">{{ title.themes.name }}</div>
+                      </div>
+                      <button class="btn text-white" @click.prevent="addToFavorites(title)">Watch later</button>
+                  </div>
+              </div>
+              <div v-if="title.title_english" class="titel-item-textSection mt-2">
+                  {{ title.title_english }}
+              </div>
+              <div v-else class="titel-item-textSection mt-2">
+                  {{ title.title }}
+              </div>
+            </router-link>
+          </slide>
+
+          <template #addons>
+            <navigation />
+            <pagination />
+          </template>
+        </carousel>
+      </div>
         <ul class="titels-list row p-0">
             <li v-for="titel in titels" :key="titel.mal_id" class="titel-item col-2 col-mb-2 px-3 pb-4">
                 <router-link :to="`/titel/${titel.mal_id}`" class="titel-item-container" @mouseenter="handleMouseEnter(titel)" @mouseleave="handleMouseLeave">
@@ -32,11 +59,21 @@
 
 <script>
 import axios from 'axios';
+import 'vue3-carousel/dist/carousel.css'
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+
 
 export default {
+  components: {
+    Carousel,
+    Slide,
+    Pagination,
+    Navigation,
+  },
   data() {
     return {
       titels: [],
+      thisSeasontitels: [],
       hoveredTitleId: null,
       currentPage: 1,
       hasNextPage: true,
@@ -49,6 +86,7 @@ export default {
   },
   mounted() {
     this.fetchTitels();
+    this.fetchSeasonTitels();
   },
   methods: {
     async fetchTitels(page = 1) {
@@ -64,6 +102,15 @@ export default {
           this.titels.push(...response.data.data);
         }
         this.hasNextPage = response.data.pagination.has_next_page;
+      } catch (error) {
+        console.error('Loading error: ', error);
+      }
+    },
+    async fetchSeasonTitels() {
+      try {
+        const response = await axios.get(`/api/home/season`);
+        this.thisSeasontitels = response.data.data;
+        console.log(this.thisSeasontitels);
       } catch (error) {
         console.error('Loading error: ', error);
       }

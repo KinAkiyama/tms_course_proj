@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
-    public function showTitels (Request $request) {
+    public function showTitels (Request $request)
+    {
         $page = $request->query('page', 1);
         $response = Http::withOptions(['verify' => false])->get("https://api.jikan.moe/v4/top/anime?page={$page}");
 
@@ -18,8 +19,9 @@ class HomeController extends Controller
         return response()->json(['error' => 'Unable to fetch data'], 500);
     }
 
-    public function showSeasonTitels () {
-        $response = Http::withOptions(['verify' => false])->get('https://api.jikan.moe/v4/top/anime');
+    public function showSeasonTitels ()
+    {
+        $response = Http::withOptions(['verify' => false])->get('https://api.jikan.moe/v4/seasons/now');
 
         if ($response->successful()) {
             return response()->json($response->json());
@@ -28,7 +30,8 @@ class HomeController extends Controller
         return response()->json(['error' => 'Unable to fetch data'], 500);
     }
 
-    public function showLastTitels () {
+    public function showLastTitels ()
+    {
         $response = Http::withOptions(['verify' => false])->get('https://api.jikan.moe/v4/top/anime');
 
         if ($response->successful()) {

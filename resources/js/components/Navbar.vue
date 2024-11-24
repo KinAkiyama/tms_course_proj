@@ -49,24 +49,24 @@ export default {
         }
     },
     methods: {
-    async searchAnime() {
-        console.log('Search query:', this.searchQuery);
-        if (this.searchQuery.length < 3) {
-        this.searchResults = [];
-        return;
-        }
+        async searchAnime() {
+            console.log('Search query:', this.searchQuery);
+            if (this.searchQuery.length < 2) {
+                this.searchResults = [];
+                return;
+            }
 
-    try {
-      const response = await axios.get(`https://api.jikan.moe/v4/anime`, {
-        params: {
-          q: this.searchQuery,
+            try {
+                const response = await axios.get(`https://api.jikan.moe/v4/anime`, {
+                    params: {
+                    q: this.searchQuery,
+                    },
+                });
+                this.searchResults = response.data.data;
+            } catch (error) {
+                console.error('Error fetching anime: ', error);
+            }
         },
-      });
-      this.searchResults = response.data.data;
-    } catch (error) {
-      console.error('Error fetching anime: ', error);
-    }
-    },
     },
 };
 </script>

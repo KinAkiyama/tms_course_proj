@@ -24,7 +24,9 @@ class FavoriteController extends Controller
 
         return response()->json($favorite, 201);
     }
-    public function destroyFavorites($mal_id) {
+
+    public function destroyFavorites($mal_id)
+    {
         $favorite = Favorite::where('mal_id', $mal_id)
             ->where('user_id', Auth::id())
             ->firstOfFail();

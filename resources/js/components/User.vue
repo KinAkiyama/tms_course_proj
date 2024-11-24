@@ -12,12 +12,6 @@
             </div>
         </div>
         <h3>Your Favorites</h3>
-        <!-- <div v-if="favorites.length != 0" v-for="favorite in favorites" :key="favorite.mal_id">
-            <h1>{{ favorite.mal_id }}</h1>
-        </div>
-        <div v-else class="">
-            <h1>there is no favorites anime</h1>
-        </div> -->
         <ul class="titels-list row p-0">
             <li v-for="favorite in favorites" :key="favorite.mal_id" class="titel-item col-2 col-mb-2 px-3 pb-4">
                 <router-link :to="`/titel/${favorite.mal_id}`" class="titel-item-container" @mouseenter="handleMouseEnter(favorite)" @mouseleave="handleMouseLeave">
@@ -112,7 +106,8 @@ export default {
         try {
             const response = await axios.put(`/api/user/${userId}/update`, {
                 username: this.newUsername,
-            }, {
+            }, 
+            {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },

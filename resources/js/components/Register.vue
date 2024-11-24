@@ -27,19 +27,21 @@
   </div>
 </template>
   
-  <script>
-  export default {
-    data() {
-      return {
-        email: '',
-        username: '',
-        password: '',
-        password_confirmation: '',
-        error: null,
-      };
-    },
-    methods: {
-      async register() {
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      email: '',
+      username: '',
+      password: '',
+      password_confirmation: '',
+      error: null,
+    };
+  },
+  methods: {
+    async register() {
       try {
         const response = await axios.post('/api/register', {
           email: this.email,
@@ -57,14 +59,13 @@
           this.error = 'Network error';
         }
       }
-      },
     },
-  };
-  </script>
-  
-  <style scoped>
-  .error {
-    color: red;
-  }
-  </style>
-  
+  },
+};
+</script>
+
+<style scoped>
+.error {
+  color: red;
+}
+</style>

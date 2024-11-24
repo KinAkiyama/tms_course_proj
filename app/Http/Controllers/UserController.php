@@ -37,7 +37,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
+        return response()->json(['message'=>'User updated successfully', 'user'=>$user], 200);
     }
 
     public function destroyUser($id)
