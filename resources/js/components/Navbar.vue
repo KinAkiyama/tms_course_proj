@@ -28,7 +28,7 @@
         <div v-if="searchResults.length" class=" container search-results-dropdown">
             <ul class="list-group">
                 <li v-for="anime in searchResults" :key="anime.mal_id" class="list-group-item">
-                    <router-link :to="`/anime/${anime.mal_id}`" class="text-decoration-none text-black">{{ anime.title }}</router-link>
+                    <router-link :key="$route.fullPath" :to="`/titel/${anime.mal_id}`" @click="handleSearchResultClick" class="text-decoration-none text-black">{{ anime.title }}</router-link>
                 </li>
             </ul>
         </div>
@@ -67,6 +67,10 @@ export default {
                 console.error('Error fetching anime: ', error);
             }
         },
+        handleSearchResultClick() {
+            this.searchResults = [];
+            this.searchQuery = '';
+        }
     },
 };
 </script>
