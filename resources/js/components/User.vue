@@ -98,6 +98,8 @@ export default {
                 },
             });
             this.user = response.data;
+            console.log(this.user);
+            console.log(userId);
         } catch (error) {
             console.error('Error fetching user:', error);
         }
@@ -119,12 +121,14 @@ export default {
         }
     },
     async fetchFavorites(userId) {
+        console.log(userId);
         try {
             const response = await axios.get(`/api/user/${userId}/favorites`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+            console.log('Favorites response:', response.data);
             const favoriteIds = response.data;
             const titleData = await this.fetchAnimeData(favoriteIds);
             this.favorites = [...titleData];

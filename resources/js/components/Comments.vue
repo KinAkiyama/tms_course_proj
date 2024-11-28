@@ -28,10 +28,13 @@
                 </div>
                 <div class="comment-body">
                     <div class="comment-text">
-                        <div class="username-update d-flex mb-3">
-                            <input v-model="comment.description" placeholder="Edit comment" class="form-control"/>
+                        <div v-if="isAuthor(comment)" class="username-update d-flex mb-3">
+                            <textarea v-model="comment.description" placeholder="Edit comment" class="form-control comment-textarea"></textarea>
                             <button class="btn show-more-btn fw-semibold ms-2" @click="updateComment(comment)">Save</button>
                             <button class="btn show-more-btn fw-semibold ms-2" @click="deleteComment(comment)">Delete</button>
+                        </div>
+                        <div v-else class="">
+                            <p>{{ comment.description }}</p>
                         </div>
                     </div>
                 </div>
@@ -58,9 +61,13 @@ export default {
     computed: {
         isAuthenticated() {
             return !!localStorage.getItem('token');
-        }
+        },
     },
     methods:{
+        isAuthor(comment) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            return user && comment.user.id === user.id;
+        },
         formatDate(date) {
             const d = new Date(date);
             const options = { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };

@@ -144,14 +144,29 @@ form .btn:hover {
 
 .carousel-container {
     width: 100%;
-    // padding: 0px, 20px
+}
+
+.carousel .carousel__slide {
+    display: block !important;
+}
+
+.carousel .carousel__next, .carousel .carousel__prev{
+    background-color: $hover-light-color-main;
+    border-radius: 50px;
+    padding: 5px;
+}
+
+.carousel .carousel__pagination-button::after{
     background-color: $light-color-main;
 }
 
-.carousel-titel-item-imageSection {
-    width: 100%;
-    padding: 5px;
+.carousel .carousel__pagination-button--active::after{
+    background-color: $hover-light-color-main;
+}
 
+.carousel-titel-item-container {
+    width: 100%;
+    padding: 0 10px;
 }
 
 .carousel-titel-item-imageSection img {
@@ -159,9 +174,22 @@ form .btn:hover {
     height: 235px;
 }
 
-// .carousel__slide {
-//     height: 235px;
-// }
+.carousel-title {
+    border-color: transparent;
+    border-bottom: 3px solid $hover-light-color-main;
+    background-color: #dee2e6;
+    text-align: center;
+}
+
+.carousel a {
+    text-decoration: none;
+    color: black;
+}
+
+.carousel .titel-item-textSection {
+    width: 75%;
+    margin: 0 auto;
+}
 
 .score-info {
     font-weight: bolder;
@@ -272,6 +300,7 @@ form .btn:hover {
 .list-group-item {
 cursor: pointer;
 }
+
 .list-group-item:hover {
 background-color: #f8f9fa;
 }
@@ -296,6 +325,10 @@ background-color: #f8f9fa;
 .comment a {
     margin-bottom: 10px;
 }
+
+// .comment-textarea {
+//     overflow: hidden;
+// }
 
 .comment-stats span {
     padding-right: 10px;

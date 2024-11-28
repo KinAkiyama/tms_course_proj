@@ -1,7 +1,8 @@
 <template>
     <div class="container py-3">
       <div class="carousel-container">
-        <carousel :items-to-show="5" :wrap-around="true" :items-to-scroll="5" class="mb-3">
+        <h3 class="p-2 rounded-top carousel-title">This season top anime</h3>
+        <carousel :items-to-show="6" :wrap-around="true" :items-to-scroll="6" class="mb-3">
           <slide v-for="title in thisSeasontitels" :key="title.mal_id" >
             <router-link :to="`/titel/${title.mal_id}`" class="carousel-titel-item-container" @mouseenter="handleMouseEnter(title)" @mouseleave="handleMouseLeave">
               <div class="carousel-titel-item-imageSection">
